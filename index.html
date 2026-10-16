@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Albardón – Cerveza Artesanal Santafesina</title>
+<link href="https://fonts.googleapis.com/css2?family=Bahiana&display=swap" rel="stylesheet">
+
+<style>
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  background: #000;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 15px;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  box-sizing: border-box;
+}
+nav a {
+  font-family: 'Bahiana';
+  font-size: 24px;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+nav a:hover { background: rgba(255,200,120,0.2); }
+
+/* ── HERO ── */
+.hero {
+  height: 100vh;
+  background: url("fondo.png") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.hero-overlay {
+  background: rgba(0,0,0,0.55);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.hero h1 {
+  font-family: 'Bahiana';
+  font-size: 150px;
+  margin: 0;
+  animation: fadeUp 1s ease forwards;
+}
+.subtitulo {
+  font-family: 'Bahiana';
+  font-size: 60px;
+  margin: 0;
+  animation: fadeUp 1s ease forwards;
+  animation-delay: 0.3s;
+}
+.frase {
+  font-size: 26px;
+  animation: fadeUp 1s ease forwards;
+  animation-delay: 0.6s;
+}
+
+/* ── SECCIONES GENERALES ── */
+section {
+  padding: 120px 20px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.titulo-seccion {
+  font-family: 'Bahiana';
+  text-align: center;
+  font-size: 60px;
+  background: linear-gradient(90deg,#ffd700,#ffb300,#fff2a8,#ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 2px;
+  margin: 0;
+}
+.linea-dorada {
+  width: 140px;
+  height: 4px;
+  margin: 10px auto 50px;
+  background: linear-gradient(90deg,#ffd700,#ffb300,#fff2a8,#ffd700);
+  box-shadow: 0 0 10px rgba(255,200,100,0.5);
+}
+
+/* ── NOSOTROS ── */
+#nosotros {
+  position: relative;
+  color: #fff8e7;
+  overflow: hidden;
+}
+#nosotros::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url("barriles.jpg") center/cover no-repeat;
+  filter: blur(4px);
+  transform: scale(1.05);
+  z-index: 0;
+}
+#nosotros::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 1;
+}
+#nosotros h2,
+#nosotros .linea-dorada,
+#nosotros .bloque-nosotros {
+  position: relative;
+  z-index: 2;
+}
+.bloque-nosotros {
+  max-width: 900px;
+  margin: auto;
+  line-height: 1.9;
+}
+.bloque-nosotros ul { padding-left: 0; list-style: none; }
+.bloque-nosotros li { margin-bottom: 6px; }
+
+/* ── CERVEZAS ── */
+#cervezas { background: #181818; }
+
+/* La section tiene max-width:1100, la sobreescribimos para cervezas */
+#cervezas.seccion-cerveza {
+  max-width: 1100px;
+}
+
+.botones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+.btn-cerveza {
+  font-family: 'Bahiana';
+  font-size: 28px;
+  padding: 20px 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: white;
+  letter-spacing: 1px;
+  transition: transform 0.2s;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.35);
+}
+.btn-cerveza:hover { transform: scale(1.07); }
+
+.btn-wheat    { background: #f2c94c; color: #3a2800; text-shadow: none; }
+.btn-apa      { background: #5a9e3a; }
+.btn-ginger   { background: #7a9e30; }
+.btn-scottish { background: #d94040; }
+.btn-porter   { background: #555555; }
+.btn-ipa      { background: #5b5bc8; }
+
+/* ── MODAL ── */
+.modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.modal-bg.open { display: flex; }
+
+.modal-card {
+  background: #111;
+  border-radius: 16px;
+  max-width: 720px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  overflow: hidden;
+  animation: zoomIn 0.3s ease;
+  position: relative;
+  border: 1px solid #333;
+}
+.modal-img-col {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 10px;
+  min-height: 360px;
+}
+.modal-img-col img {
+  width: 160px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,0.6));
+}
+.modal-info {
+  padding: 28px 28px 28px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.modal-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  width: fit-content;
+}
+.modal-nombre {
+  font-family: 'Bahiana';
+  font-size: 38px;
+  line-height: 1;
+  color: white;
+}
+.modal-sub {
+  font-size: 13px;
+  color: #aaa;
+  font-style: italic;
+}
+.modal-stats { display: flex; gap: 12px; }
+.modal-stat {
+  text-align: center;
+  background: #1e1e1e;
+  border-radius: 8px;
+  padding: 10px 16px;
+  min-width: 55px;
+}
+.modal-stat-val { font-size: 18px; font-weight: 600; color: white; }
+.modal-stat-key {
+  font-size: 10px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+.modal-desc {
+  font-size: 13.5px;
+  color: #ccc;
+  line-height: 1.75;
+  font-family: Georgia, serif;
+}
+.modal-cerrar {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 32px;
+  color: #aaa;
+  cursor: pointer;
+  background: none;
+  border: none;
+  line-height: 1;
+}
+.modal-cerrar:hover { color: white; }
+
+/* ── MARIDAJES ── */
+#maridajes { background: #111; }
+.chat-maridaje {
+  background: rgba(0,0,0,0.6);
+  padding: 30px;
+  border-radius: 12px;
+}
+
+/* ── CONTACTO ── */
+#contacto { background: #181818; text-align: center; }
+
+/* ── FOOTER ── */
+footer { padding: 30px; text-align: center; background: #000; }
+
+/* ── BOTÓN VOLVER ARRIBA ── */
+#btn-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: rgba(255,200,120,0.9);
+  color: #000;
+  font-family: 'Bahiana';
+  font-size: 24px;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  z-index: 1500;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: 0.3s;
+}
+#btn-top:hover {
+  transform: scale(1.1);
+  background: rgba(255,200,120,1);
+}
+
+/* ── ANIMACIONES ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes zoomIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* ── SCROLL REVEAL ── */
+.animar {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.animar.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#nosotros">NOSOTROS</a>
+  <a href="#cervezas">NUESTRAS CERVEZAS</a>
+  <a href="#maridajes">MARIDAJES</a>
+  <a href="#contacto">CONTACTO</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-overlay">
+    <h1>Albardón</h1>
+    <p class="subtitulo">Cerveza Artesanal Santafesina</p>
+    <p class="frase">Hecha acá, para compartir...</p>
+  </div>
+</div>
+
+<!-- NOSOTROS -->
+<section id="nosotros">
+  <h2 class="titulo-seccion animar">Nosotros</h2>
+  <div class="linea-dorada"></div>
+
+  <div class="bloque-nosotros animar">
+
+    <p>Albardón nació en 2017, casi como un juego: ollas prestadas, cocina de casa y mucha curiosidad por
+    experimentar. Lo que empezó como hobby pronto encontró su rumbo cuando familiares y amigos no solo
+    probaban nuestras cervezas, sino que también pedían más. Ese entusiasmo nos impulsó a transformar la
+    pasión en un emprendimiento familiar. Silvia, junto con el apoyo de Teo y Ciro, fueron parte clave en
+    darle vida a este proyecto que, con el tiempo, se convirtió en Albardón Cerveza Artesanal Santafesina.</p>
+
+    <p>El nombre lo elegimos pensando en nuestras raíces: buscábamos algo que hablara de Santa Fe, de nuestra
+    tierra, sin ser literal. Entre muchas opciones, apareció Albardón, y supimos que ahí estaba todo lo que
+    queríamos transmitir: identidad, paisaje y la posibilidad de crear una estética única alrededor de
+    nuestra cerveza.</p>
+
+    <p>El crecimiento de Albardón vino acompañado de un compromiso cada vez mayor con la calidad. Lo que
+    empezó en casa con ollas prestadas, pronto se convirtió en un desafío más grande: producir más, llegar
+    a nuevos clientes y mantener siempre el nivel que nos identifica.</p>
+
+    <p>En Albardón, cada pinta no solo está hecha con dedicación artesanal, sino también con el respaldo de
+    una formación profesional que asegura calidad, innovación y respeto por el producto. Creemos que una
+    buena cerveza empieza por la calidad de sus ingredientes. Siempre buscamos trabajar con lo mejor que
+    tenemos a nuestro alcance, y si son nacionales, ¡mucho mejor!</p>
+
+    <p>Nos apasionan los estilos tradicionales, esos que llevan años escribiendo la historia cervecera del
+    mundo, y que reinterpretamos a nuestra manera. Cada uno de ellos es fiel a la tradición, pero con el
+    toque personal que caracteriza a Albardón. También nos gusta ir más allá y desafiar los límites. Así
+    nacieron propuestas únicas como la Ginger Blonde o la UPA (Ubajay Pale Ale), una creación original
+    elaborada con frutos del Ubajay que refleja nuestra identidad santafesina y el espíritu innovador que
+    nos mueve.</p>
+
+    <p><strong>UN PROYECTO FAMILIAR QUE SIGUE CRECIENDO</strong></p>
+
+    <p>Albardón nació como un sueño compartido y hoy sigue siendo un proyecto profundamente familiar. En
+    2025 se sumaron al equipo Juan Pablo y Mariano, aportando su energía y compromiso para que juntos
+    podamos mejorar y hacer crecer a Albardón. Cada paso que damos reafirma nuestra idea inicial: hacer
+    cerveza artesanal de calidad, con raíces santafesinas y el calor de lo hecho en familia.</p>
+
+    <p><strong>ALBARDÓN PRESENTE</strong></p>
+
+    <p>Nuestra cerveza no solo se disfruta en bares o en casa: también forma parte de la vida cultural y
+    social de Santa Fe. A lo largo de los años hemos participado en numerosos festivales, ferias y eventos,
+    compartiendo nuestra pasión con miles de personas. Para nosotros, cada evento es una oportunidad de
+    acercar Albardón a la gente, compartir experiencias y seguir construyendo comunidad alrededor de la
+    cerveza artesanal.</p>
+
+    <p><strong>NUESTRAS PRESENTACIONES Y SERVICIOS</strong></p>
+
+    <p>En Albardón queremos que disfrutes de nuestra cerveza de la forma que más te guste. Por eso ofrecemos
+    distintas presentaciones y servicios adaptados a cada necesidad:</p>
+
+    <ul>
+      <li>▪ Barriles de 20, 30 y 50 litros</li>
+      <li>▪ Botellas de 355cc y 500cc</li>
+      <li>▪ Botellas PET de 1000cc</li>
+    </ul>
+
+    <p><strong>Servicios</strong></p>
+
+    <ul>
+      <li>▪ Alquiler de choperas junto con barriles</li>
+      <li>▪ Barras para eventos, desde reuniones pequeñas hasta festivales multitudinarios</li>
+    </ul>
+
+    <p>Ya sea en casa, en un bar o en un gran evento, siempre podés contar con Albardón para acompañar
+    buenos momentos con cerveza artesanal santafesina de calidad.</p>
+
+  </div>
+</section>
+
+<!-- CERVEZAS -->
+<section id="cervezas" class="seccion-cerveza">
+  <h2 class="titulo-seccion">Nuestras Cervezas</h2>
+  <div class="linea-dorada"></div>
+
+  <div class="botones-grid">
+    <button class="btn-cerveza btn-wheat"    onclick="abrirFicha('wheat')">American Wheat</button>
+    <button class="btn-cerveza btn-apa"      onclick="abrirFicha('apa')">APA</button>
+    <button class="btn-cerveza btn-ginger"   onclick="abrirFicha('ginger')">Ginger Blonde</button>
+    <button class="btn-cerveza btn-scottish" onclick="abrirFicha('scottish')">Scottish</button>
+    <button class="btn-cerveza btn-porter"   onclick="abrirFicha('porter')">Porter</button>
+    <button class="btn-cerveza btn-ipa"      onclick="abrirFicha('ipa')">Session IPA</button>
+  </div>
+</section>
+
+<!-- MODAL CERVEZAS -->
+<div class="modal-bg" id="modal" onclick="cerrarSiFondo(event)">
+  <div class="modal-card">
+    <button class="modal-cerrar" onclick="cerrarFicha()">×</button>
+
+    <div class="modal-img-col">
+      <img id="modal-img" src="" alt="Botella" />
+    </div>
+
+    <div class="modal-info">
+      <span class="modal-badge" id="modal-badge"></span>
+      <div class="modal-nombre" id="modal-nombre"></div>
+      <div class="modal-sub"    id="modal-sub"></div>
+      <div class="modal-stats">
+        <div class="modal-stat"><div class="modal-stat-val" id="m-abv"></div><div class="modal-stat-key">ABV</div></div>
+        <div class="modal-stat"><div class="modal-stat-val" id="m-ibu"></div><div class="modal-stat-key">IBU</div></div>
+        <div class="modal-stat"><div class="modal-stat-val" id="m-srm"></div><div class="modal-stat-key">SRM</div></div>
+      </div>
+      <div class="modal-desc" id="modal-desc"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MARIDAJES (placeholder) -->
+<section id="maridajes">
+  <h2 class="titulo-seccion animar">Maridajes</h2>
+  <div class="linea-dorada"></div>
+  <div class="chat-maridaje">
+    <p style="text-align:center; color:#aaa; font-size:18px;">Próximamente — sugerencias de maridaje para cada estilo.</p>
+  </div>
+</section>
+
+<!-- CONTACTO (placeholder) -->
+<section id="contacto">
+  <h2 class="titulo-seccion animar">Contacto</h2>
+  <div class="linea-dorada"></div>
+  <p style="color:#aaa; font-size:18px;">Próximamente — formulario de contacto e información.</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p style="color:#666; font-size:14px;">© 2025 Albardón Cerveza Artesanal Santafesina</p>
+</footer>
+
+<!-- BOTÓN VOLVER ARRIBA -->
+<button id="btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Inicio</button>
+
+<script>
+
+/* ── DATOS CERVEZAS ── */
+const CERVEZAS = {
+  wheat: {
+    nombre: "American Wheat",
+    sub:    "Ligera · Fresca · Sedosa",
+    badge:  "Trigo",
+    badgeBg: "#f2c94c", badgeColor: "#3a2800",
+    abv: "4%", ibu: "21", srm: "3",
+    img: null,   /* todavía sin imagen — agregá: "img/wheat.png" cuando la tengas */
+    desc: "De color dorado pálido, fresca y luminosa. Perfil suave con notas delicadas de malta de trigo, textura sedosa y un leve toque frutal. Bajo amargor, balance amable y accesible. Perfecta para el calor o para cualquier momento en que se busca algo liviano y agradable."
+  },
+  apa: {
+    nombre: "APA – American Pale Ale",
+    sub:    "Cítrica · Frutal · Equilibrada",
+    badge:  "Pale Ale",
+    badgeBg: "#5a9e3a", badgeColor: "#fff",
+    abv: "5.2%", ibu: "32", srm: "5",
+    img: "img/apa.png",
+    desc: "Dorado profundo y brillante. El lúpulo es protagonista con notas a pomelo, naranja y frutas tropicales. Las maltas suman dulzor y redondean la experiencia. Final con amargor medio, limpio y agradable, que invita a seguir tomando."
+  },
+  ginger: {
+    nombre: "Ginger Blonde",
+    sub:    "Aromática · Especiada · Original",
+    badge:  "Especiada",
+    badgeBg: "#7a9e30", badgeColor: "#fff",
+    abv: "5%", ibu: "21", srm: "4",
+    img: "img/ginger.png",
+    desc: "Dorado brillante, liviana y refrescante. El jengibre aporta aroma y sabor marcado pero equilibrado: fresco, especiado y apenas picante, que despierta el paladar sin invadirlo. Perfecta para quienes se animan a salir de lo clásico sin irse a extremos."
+  },
+  scottish: {
+    nombre: "Scottish",
+    sub:    "Maltosa · Caramelo · Reconfortante",
+    badge:  "Amber Ale",
+    badgeBg: "#d94040", badgeColor: "#fff",
+    abv: "3.5%", ibu: "12", srm: "14",
+    img: "img/scottish.png",
+    desc: "Clásica y tranquila. Cuerpo liviano con notas suaves a caramelo, pan y un leve tostado. Amargor casi imperceptible. Cada sorbo es equilibrado y redondo, con sensación cálida. Ideal para quienes prefieren el protagonismo de la malta."
+  },
+  porter: {
+    nombre: "Porter",
+    sub:    "Café · Chocolate · Profunda",
+    badge:  "Oscura",
+    badgeBg: "#555", badgeColor: "#ddd",
+    abv: "4.7%", ibu: "23", srm: "32",
+    img: "img/porter.png",
+    desc: "Marrón oscuro con destellos rojizos. Las maltas oscuras aportan aromas a café recién hecho y chocolate, con un tostado elegante. Cuerpo medio, amargor bajo con lúpulos ingleses que redondean el conjunto sin imponerse."
+  },
+  ipa: {
+    nombre: "Session IPA",
+    sub:    "Lupulada · Cítrica · Tomable",
+    badge:  "Session IPA",
+    badgeBg: "#5b5bc8", badgeColor: "#fff",
+    abv: "4.3%", ibu: "40", srm: "4",
+    img: "img/ipa.png",
+    desc: "Todo el aroma y amargor de una IPA clásica con menor graduación. Perfil intensamente cítrico y frutado, donde el lúpulo manda desde el primer momento. Cuerpo ligero. Mucho lúpulo, máxima tomabilidad."
+  }
+};
+
+/* ── MODAL ── */
+function abrirFicha(tipo) {
+  const c = CERVEZAS[tipo];
+
+  document.getElementById("modal-nombre").textContent = c.nombre;
+  document.getElementById("modal-sub").textContent    = c.sub;
+  document.getElementById("modal-desc").textContent   = c.desc;
+  document.getElementById("m-abv").textContent = c.abv;
+  document.getElementById("m-ibu").textContent = c.ibu;
+  document.getElementById("m-srm").textContent = c.srm;
+
+  const badge = document.getElementById("modal-badge");
+  badge.textContent       = c.badge;
+  badge.style.background  = c.badgeBg;
+  badge.style.color       = c.badgeColor;
+
+  const img = document.getElementById("modal-img");
+  if (c.img) {
+    img.src            = c.img;
+    img.style.display  = "block";
+  } else {
+    img.src            = "";
+    img.style.display  = "none";
+  }
+
+  document.getElementById("modal").classList.add("open");
+}
+
+function cerrarFicha() {
+  document.getElementById("modal").classList.remove("open");
+}
+
+function cerrarSiFondo(e) {
+  if (e.target.id === "modal") cerrarFicha();
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") cerrarFicha();
+});
+
+/* ── SCROLL REVEAL ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add("visible");
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll(".animar").forEach(el => observer.observe(el));
+
+</script>
+</body>
+</html>
